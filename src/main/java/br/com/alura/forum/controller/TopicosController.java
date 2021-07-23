@@ -3,18 +3,23 @@ package br.com.alura.forum.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.alura.forum.dto.DetalhesDoTopicoDTO;
 import br.com.alura.forum.dto.TopicoDTO;
+import br.com.alura.forum.form.AtualizacaoTopicoForm;
 import br.com.alura.forum.form.TopicoForm;
 import br.com.alura.forum.modelo.Topico;
 import br.com.alura.forum.repository.CursoRepository;
@@ -57,4 +62,20 @@ public class TopicosController {
 		URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
 		return ResponseEntity.created(uri).body(new TopicoDTO(topico));
 	}
+	
+	//Traz o detalhe de um tópico específico
+	@GetMapping("/{id}")
+	public DetalhesDoTopicoDTO detalhar(@PathVariable Long id) {
+		Topico topico = topicoRepository.getOne(id);
+		return new DetalhesDoTopicoDTO(topico);
+	}
+	
+	//Atualiza o tópico específico
+	@PutMapping("{id}")
+	@Transactional
+	public ResponseEntity<TopicoDTO> autalizaTopico(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm topicoForm ){
+		Topico topico = topicoForm.atualizar(id, topicoRepository);
+		return ResponseEntity.ok(new TopicoDTO(topico));
+	}
+	
 }
