@@ -3,6 +3,8 @@ package br.com.alura.forum.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +45,7 @@ public class TopicosController {
 	}
 	
 	@PostMapping//O responseEntity é uma classe do Spring que nos permite controlar o resultado da requisição
-	public ResponseEntity<TopicoDTO> cadastrarTopico(@RequestBody TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<TopicoDTO> cadastrarTopico(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder uriBuilder) {
 		Topico topico = topicoForm.converter(cursoRepository);
 		topicoRepository.save(topico);
 		
