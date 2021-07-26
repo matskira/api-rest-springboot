@@ -1,0 +1,6 @@
+## Descreva o que deseja
+
+Lembre-se de que se for um problema, você precisa informar
+
+- O dispositivo
+- ...
